@@ -1,187 +1,285 @@
-# Employee Task & Project Management Web Application
+# Employee–Task–Project Management System
 
-> **Project:** Group Full-Stack Development Internship Major Project  
-> **Assigned Responsibility:** **MODULE 5 — DASHBOARD**  
-> **Maintainer / Lead Developer (Module 5):** Sanjay Kumar  
-> **Integrated Modules:** User Authentication (M1), Employee Management (M2), Project Management (M3), Task Management (M4), Dashboard (M5), Search & Filtering (M6), Database & REST API (M7).
+A full-stack web application for managing employees, projects, and tasks through an integrated dashboard, with authentication, search, and filtering capabilities.
 
----
-
-## 1. Executive Summary
-
-This application is an enterprise-grade, full-stack web application designed for end-to-end management of corporate employees, projects, task deliverables, and team productivity analytics.
-
-Module 5 Dashboard provides a professional analytical view of employee, project, and task data using real-time MongoDB-backed KPIs, project progress, employee workload analytics, and recent/priority task information.
+**GitHub Repository:** [SANJAY-ZZ/Dashboard-majorpr](https://github.com/SANJAY-ZZ/Dashboard-majorpr)
 
 ---
 
-## 2. Technology Stack
+## 1. Project Overview
 
-- **Frontend:** React.js (v18), Vite (v5)
-- **Styling:** Tailwind CSS (v3) with Dark-First Enterprise SaaS theme
-- **Backend:** Node.js (v18+), Express.js (v4)
-- **Database / ODM:** MongoDB with Mongoose (v8) + Automatic In-Memory Mongo fallback (`mongodb-memory-server`) for zero-setup execution
-- **Authentication:** JWT (JSON Web Tokens) with bcrypt password hashing
-- **Routing:** React Router DOM (v6)
+The Employee–Task–Project Management System is a collaborative software project designed to bring essential employee, project, and task management functions together in one web application.
 
----
+The application provides a centralized interface for accessing management modules, tracking tasks, organizing projects, and viewing dashboard information. It integrates a React frontend with a Node.js and Express backend, using MongoDB for data storage.
 
-## 3. Module 5 — Dashboard Architecture & Data Engine
+This project was developed collaboratively by a team of seven members, with each member contributing to a designated module and the modules integrated into a single application.
 
-### 3.1 Real MongoDB Aggregation (Zero Hardcoded / Fake Data)
+## 2. Key Features
 
-All statistics and visual components are driven by the `GET /api/dashboard/stats` endpoint:
+- **Authentication:** User authentication and login/logout functionality.
+- **Employee Management:** Employee records and management interface.
+- **Project Management:** Project organization and management.
+- **Task Management:** Create, view, edit, update the status of, and delete tasks.
+- **Dashboard:** Centralized dashboard with management statistics.
+- **Search and Filtering:** Search and filter functionality for tasks and projects.
+- **REST API:** Backend endpoints supporting dashboard, employee, project, and task operations.
+- **Database Integration:** MongoDB and Mongoose integration for persistent data storage.
 
-1. **Total Employees:** Count of active documents in the `Employee` collection:
-   ```javascript
-   await Employee.countDocuments();
-   ```
-2. **Active Projects:**
-   ```javascript
-   await Project.countDocuments({ status: 'Active' });
-   ```
-3. **Completed Projects:**
-   ```javascript
-   await Project.countDocuments({ status: 'Completed' });
-   ```
-4. **Pending Tasks:**
-   ```javascript
-   await Task.countDocuments({ status: 'Pending' });
-   ```
-5. **Completed Tasks:**
-   ```javascript
-   await Task.countDocuments({ status: 'Completed' });
-   ```
+## 3. Technology Stack
 
-### 3.2 Real Project Progress Calculation
-Project progress is never fabricated; it is mathematically derived from associated tasks:
-$$\text{Project Progress} = \frac{\text{Completed Tasks}}{\text{Total Tasks}} \times 100$$
-*(If a project has zero tasks assigned yet, its baseline project progress field is utilized).*
+| Layer | Technologies |
+|---|---|
+| Frontend | React, Vite, JavaScript |
+| Styling | Tailwind CSS |
+| Backend | Node.js, Express.js |
+| Database | MongoDB, Mongoose |
+| Authentication | JSON Web Token (JWT), bcryptjs |
+| API Communication | Axios |
+| Testing | Node.js test scripts, MongoMemoryServer |
+| Development Tools | Git, GitHub, Visual Studio Code |
 
-### 3.3 Employee Task Workload Statistics
-Aggregated per team member across all assigned tasks:
-- **Total Tasks**
-- **Completed Tasks**
-- **In Progress Tasks**
-- **Pending Tasks**
-- **Completion Rate (%)**
+## 4. Project Modules and Team Contributions
 
-Rendered with an interactive stacked bar chart featuring hover tooltips and department filtering.
+The project was developed by seven team members. Each member is acknowledged equally as a contributor to the overall application, with individual responsibilities documented below.
 
-### 3.4 Priority Tasks & Recent Activity Overview
-Provides immediate operational oversight of pressing deliverables:
-- **Priority Badging:** Instant visual sorting by High, Medium, and Low urgency.
-- **Project & Assignee Context:** Live links associating tasks with their respective project and responsible team member.
-- **Due Date Tracking:** Relative time calculations and overdue indicators.
-- **Inline Status Updates:** Real-time state toggling directly updating MongoDB.
+| No. | Team Member | Module / Responsibility |
+|---:|---|---|
+| 1 | **Prethiksha** | Authentication |
+| 2 | **Lakku Sindhu** | Employee Management |
+| 3 | **S. Pallavika** | Project Management |
+| 4 | **Angelin Sarah George** | Task Management |
+| 5 | **Sanjay Kumar S** | Dashboard and Integration |
+| 6 | **Debajyoti Bandyopadhyay** | Search and Filtering |
+| 7 | **Harini K** | Database and REST API |
 
----
+### Equal Team Acknowledgement
 
-## 4. Project Structure
+We acknowledge and appreciate the contributions of all seven team members to the development of the Employee–Task–Project Management System.
 
+Each member contributed to a designated area of the project, and the combined work of the team made the integrated application possible. Module responsibilities are listed to provide transparency about individual areas of work; they do not diminish any member's contribution to the overall team project.
+
+**Developed collaboratively by all seven team members.**
+
+## 5. Application Architecture
+
+The application follows a frontend–backend architecture.
+
+```text
+Employee–Task–Project Management System
+                 |
+        React Frontend (Vite)
+                 |
+        Axios API Requests
+                 |
+       Node.js / Express Backend
+                 |
+       MongoDB with Mongoose
 ```
-ESPD_/
+
+- **Frontend:** Provides the user interface and management pages.
+- **Backend:** Handles API requests and application logic.
+- **Database:** Stores application data through MongoDB and Mongoose.
+- **Integration:** Connects the frontend modules to the backend services.
+
+## 6. Project Structure
+
+The following is a simplified overview of the main project folders.
+
+```text
+Dashboard-majorpr/
 ├── backend/
-│   ├── config/
-│   │   └── db.js                 # Resilient MongoDB connection with in-memory fallback
 │   ├── controllers/
-│   │   ├── authController.js     # Module 1: Auth & JWT handling
-│   │   ├── employeeController.js # Module 2: Employee CRUD & dept stats
-│   │   ├── projectController.js  # Module 3: Project CRUD & task-linked progress
-│   │   ├── taskController.js     # Module 4: Task lifecycle & status hooks
-│   │   └── dashboardController.js# Module 5: KPI, Progress & Workload aggregations
+│   ├── middleware/
 │   ├── models/
-│   │   ├── Employee.js           # Employee Mongoose schema
-│   │   ├── Project.js            # Project Mongoose schema
-│   │   ├── Task.js               # Task Mongoose schema (with pre-save sync hooks)
-│   │   └── User.js               # User authentication schema
 │   ├── routes/
-│   │   ├── authRoutes.js         # /api/auth
-│   │   ├── employeeRoutes.js     # /api/employees
-│   │   ├── projectRoutes.js      # /api/projects
-│   │   ├── taskRoutes.js         # /api/tasks
-│   │   └── dashboardRoutes.js    # /api/dashboard/stats
 │   ├── seed/
-│   │   └── seedData.js           # Seed dataset matching team standards
 │   ├── tests/
-│   │   ├── test_dashboard_api.js # Module 5 automated test suite (35 assertions)
-│   │   └── test_api.js           # Task management integration test suite
+│   ├── .env.example
 │   ├── package.json
 │   └── server.js
-│
 ├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── dashboard/
-│   │   │   │   ├── DashboardHeader.jsx  # Hero greeting, live clock, refresh button
-│   │   │   │   ├── StatCard.jsx         # Animated counter KPI card with route navigation
-│   │   │   │   ├── ProjectProgress.jsx  # Task-driven delivery velocity bars & search
-│   │   │   │   ├── EmployeeTaskStats.jsx# Stacked bar chart workload analytics
-│   │   │   │   ├── RecentTasks.jsx      # Priority tasks table with quick completion toggle
-│   │   │   │   └── DashboardSkeletons.jsx# Shimmer loading states
-│   │   │   └── layout/
-│   │   │       ├── Sidebar.jsx          # Dark SaaS sidebar with module navigation
-│   │   │       ├── Navbar.jsx           # Top app bar with search and user badge
-│   │   │       └── Layout.jsx           # Main shell wrapper
-│   │   ├── pages/
-│   │   │   ├── DashboardPage.jsx        # MODULE 5 DASHBOARD PAGE
-│   │   │   ├── TasksPage.jsx            # Module 4 Task Management
-│   │   │   ├── ProjectsPage.jsx         # Module 3 Project Management
-│   │   │   ├── EmployeesPage.jsx        # Module 2 Employee Directory
-│   │   │   ├── SearchPage.jsx           # Module 6 Universal Search & Filters
-│   │   │   ├── LoginPage.jsx            # Module 1 Sign In & Demo Fast-Login
-│   │   │   └── RegisterPage.jsx         # Module 1 Registration
-│   │   ├── services/
-│   │   │   ├── api.js                   # Axios client with JWT interceptor
-│   │   │   ├── authService.js           # Session and auth tokens
-│   │   │   └── dashboardService.js      # Dashboard stats API calls
-│   │   ├── App.jsx                      # React Router routes
-│   │   ├── index.css                    # Tailwind CSS + custom glassmorphism
-│   │   └── main.jsx
+│   ├── public/
 │   ├── package.json
-│   ├── tailwind.config.js
 │   └── vite.config.js
-│
-└── package.json                         # Root orchestrator
+├── README.md
+└── package.json
 ```
 
----
+This tree highlights the principal directories; individual files and subdirectories may vary in the current repository.
 
-## 5. Getting Started
+## 7. Prerequisites
 
-### 5.1 Quick Seed & Test
-Run the automated test suite (includes in-memory MongoDB, zero setup required):
+Before running the application, make sure you have:
+
+- Node.js and npm installed.
+- MongoDB installed and running locally, or access to a configured MongoDB instance.
+- Git installed if you intend to clone the repository.
+- A code editor such as Visual Studio Code.
+
+## 8. Installation and Setup
+
+### Step 1: Clone the repository
+
 ```bash
-cd backend
-npm test
+git clone https://github.com/SANJAY-ZZ/Dashboard-majorpr.git
+cd Dashboard-majorpr
 ```
 
-### 5.2 Seeding Database
-To populate MongoDB with realistic enterprise data (Employees, Projects, Tasks, Demo Accounts):
+### Step 2: Install backend dependencies
+
 ```bash
 cd backend
+npm install
+```
+
+### Step 3: Configure the backend environment
+
+Create a `.env` file in the backend directory using the provided `backend/.env.example` as a reference.
+
+Configure the required MongoDB connection and other environment variables according to that example file.
+
+**Security note:** Never commit real `.env` files, database credentials, JWT secrets, or passwords to GitHub.
+
+### Step 4: Start the backend
+
+From the project root, run:
+
+```bash
+npm run start:backend
+```
+
+The backend is configured to use port `5000` in the current development setup.
+
+### Step 5: Install frontend dependencies
+
+Open a second terminal in the project root and run:
+
+```bash
+cd frontend
+npm install
+```
+
+### Step 6: Start the frontend
+
+From the project root, run:
+
+```bash
+npm run start:frontend
+```
+
+Vite typically serves the frontend at:
+
+```text
+http://localhost:5173
+```
+
+Keep the backend and frontend terminals running while using the application.
+
+### Optional: Seed the database
+
+If you need to initialize or repopulate the database, review the seed script first and then run the following command from the project root:
+
+```bash
 npm run seed
 ```
 
-### 5.3 Starting the Backend
-```bash
-cd backend
-npm start
-```
-*API runs on `http://localhost:5000`*  
-*Health check: `http://localhost:5000/api/health`*  
-*Dashboard stats: `http://localhost:5000/api/dashboard/stats`*
+Use this command only when appropriate for your database setup, because seeding may insert or modify records.
 
-### 5.4 Starting the Frontend
-```bash
-cd frontend
-npm run dev
-```
-*Frontend runs on `http://localhost:5173`*
+## 9. Backend API
 
-### 5.5 Test Login Credentials
-For testing role-based access:
-- **Admin:** `admin@company.com` / `Admin@12345`
-- **Project Manager:** `manager@company.com` / `Manager@12345`
-- **Employee:** `rahul@gmail.com` / `Rahul@12345`
-*(One-click quick login buttons are also provided directly on the Login screen).*
+The backend exposes endpoints for application health, dashboard statistics, and management resources.
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/health` | Check backend health |
+| `GET /api/dashboard/stats` | Retrieve dashboard statistics |
+| `/employees` | Employee resource operations |
+| `/projects` | Project resource operations |
+| `/tasks` | Task resource operations |
+
+The employee, project, and task resource paths above represent the API paths used by the application. The exact supported HTTP methods and request formats depend on the implemented backend routes.
+
+## 10. Testing and Verification
+
+The following checks have been performed during development:
+
+- Authentication and login/logout functionality.
+- Dashboard, employee, project, and task management pages.
+- Task creation, editing, status updates, and deletion.
+- Search and filtering functionality for tasks and projects.
+- Persistence of task data and task status updates in the configured MongoDB database.
+- Frontend production build using Vite.
+
+The frontend production build completed successfully with Vite 5.4.21, transforming 1,644 modules.
+
+The backend automated test suite was also reported to pass 124 tests across four test suites. Those automated tests use MongoMemoryServer for an in-memory test database; this result should be distinguished from the separate manual checks against the configured application database.
+
+### Run the backend tests
+
+From the project root:
+
+```bash
+npm run test:backend
+```
+
+### Build the frontend for production
+
+From the project root:
+
+```bash
+npm run build:frontend
+```
+
+The frontend build output is generated in `frontend/dist/`.
+
+## 11. Screenshots
+
+Screenshots can be added to a `screenshots/` directory in the repository to demonstrate the application's interface.
+
+Recommended screenshots:
+
+- Login page
+- Dashboard
+- Employee Management
+- Project Management
+- Task Management
+- Search and Filtering
+
+After adding the actual screenshot files, include them here using Markdown image links. For example:
+
+```markdown
+![Dashboard](screenshots/dashboard.png)
+```
+
+Use the actual filenames of the screenshots saved in the repository.
+
+## 12. Future Improvements
+
+Potential future improvements include:
+
+- Adding more automated integration tests.
+- Improving validation and error handling across modules.
+- Expanding reporting and analytics capabilities.
+- Enhancing accessibility and responsive layouts.
+- Adding deployment documentation and production environment configuration.
+
+These are possible future enhancements, not claims about currently implemented features.
+
+## 13. Repository
+
+Explore the source code, review the project structure, and follow the development work here:
+
+**[Open the GitHub Repository](https://github.com/SANJAY-ZZ/Dashboard-majorpr)**
+
+## 14. Acknowledgements
+
+We sincerely acknowledge all seven team members for their collaborative work on the Employee–Task–Project Management System.
+
+The project represents a combined effort across authentication, employee management, project management, task management, dashboard integration, search and filtering, and database/API development.
+
+**Project:** Employee–Task–Project Management System
+**Team size:** 7 members
+**Repository:** [SANJAY-ZZ/Dashboard-majorpr](https://github.com/SANJAY-ZZ/Dashboard-majorpr)
+
+*Built collaboratively as a team software development project.*
